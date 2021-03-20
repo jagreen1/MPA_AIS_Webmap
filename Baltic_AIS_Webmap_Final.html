@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <meta charset="utf-8">
+    <title>Baltic Marine Vessel AIS</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/addons/p5.sound.min.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <style>
+      h2,
+      h3 {
+        margin: 10px;
+        font-size: 1.2em;
+      }
+
+      h3 {
+        font-size: 1em;
+      }
+
+      p {
+        font-size: 0.85em;
+        margin: 10px;
+        text-align: left;
+      }
+
+      #menu {
+        background: rgba(255, 255, 255, 0.8);
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+        left: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      #menu a {
+        font-size: 13px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        text-align: center;
+      }
+
+      #menu a:last-child {
+        border: none;
+      }
+
+      #menu a:hover {
+        background-color: #f8f8f8;
+        color: #404040;
+      }
+
+      #menu a.active {
+        background-color: #626669;
+        color: #ffffff;
+      }
+
+      #menu a.active:hover {
+        background: #3070b0;
+      }
+
+      .map-overlay {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.8);
+        margin-right: 10px;
+        font-family: Arial, sans-serif;
+        overflow: auto;
+        border-radius: 3px;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      #features {
+        background: rgba(255, 255, 255, 0.8);
+        top: 0;
+        height: 230px;
+        margin-top: 20px;
+        width: 230px;
+      }
+
+
+
+      .legend {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 3px;
+        bottom: 30px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        padding: 10px;
+        position: absolute;
+        right: 10px;
+        z-index: 1;
+      }
+
+      .legend h4 {
+        margin: 0 0 10px;
+      }
+
+      .legend div span {
+        border-radius: 50%;
+        display: inline-block;
+        height: 10px;
+        margin-right: 5px;
+        width: 10px;
+      }
+
+    </style>
+
+
+    <div id="map"></div>
+
+
+    <div class='map-overlay' id='legend'></div>
+    <div class="map-overlay" id="features">
+      <h2>Baltic AIS Live Vessel Activity</h2>
+      <div id="pd">
+        <p>Scroll or click on ship clusters to zoom in on a group of vessels. </p>
+        <p>Click on marine protected area polygons and marine vessel points for additional information.</p>
+        <p>Turn clustered and unclustered vessel layers on and off using the buttons located in the top left corner.
+        </p>
+      </div>
+    </div>
+
+    <div id="vessel-legend" class="legend">
+      <h4>Vessel Navigation Status</h4>
+      <div><span style="background-color: #ecd155"></span>NavStat: 1 = at anchor</div>
+      <div><span style="background-color: #5d68a9"></span>NavStat: 3 = restricted maneuverability</div>
+      <div><span style="background-color: #c1c85b"></span>NavStat: 5 = moored</div>
+      <div><span style="background-color: #d54879"></span>NavStat: 7 = engaged in fishing</div>
+      <div><span style="background-color: #eb973b"></span>NavStat: 8 = under way sailing</div>
+      <div><span style="background-color: #735a9f"></span>NavStat: 15 = undefined (default)</div>
+      <div><span style="background-color: #5895ca"></span>Other</div>
+    </div>
+
+    <nav id="menu"></nav>
+
+
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoiamdyZWVuMSIsImEiOiJja2xhMHEwbDMydHFqMzB0N3FxdTAyYjl6In0.Hv__9wnsQJpvHjh-zLgZMw';
+
+      var bounds = [
+        [-2, 51], // Southwest coordinates
+        [40, 69] // Northeast coordinates
+      ];
+
+      var icons = [{
+          id: 'clustered_ship_icon',
+          url: 'https://cdn2.iconfinder.com/data/icons/maps-and-navigation-glyph-1/128/41-512.png'
+        }, {
+          id: 'unclustered_ship_underway_engine_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/yellow_ship.png'
+        }, {
+          id: 'unclustered_ship_underway_sailing_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/orange_ship.png'
+        }, {
+          id: 'unclustered_ship_moored_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/yellow-green_ship.png'
+        },
+        {
+          id: 'unclustered_ship_anchored_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/green_ship.png'
+        },
+        {
+          id: 'unclustered_ship_undefined_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/purple_ship.png'
+        },
+        {
+          id: 'unclustered_ship_other_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/blue_ship.png'
+        },
+        {
+          id: 'unclustered_ship_restricted_maneuverability_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/dark_purple_ship.png'
+        },
+        {
+          id: 'unclustered_ship_fishing_icon',
+          url: 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/red_ship.png'
+        }
+      ];
+
+      var cluster_condition = true;
+
+      var map = new mapboxgl.Map({
+        container: 'map',
+        //style: 'mapbox://styles/mapbox/satellite-v9',
+        style: 'mapbox://styles/mapbox/outdoors-v11',
+
+        center: [20, 60],
+        zoom: 3.5,
+        attributionControl: false,
+        maxBounds: bounds // Sets bounds as max
+      });
+
+      var image_promises = icons.map(icon => {
+        // return a promise per icon
+        return new Promise(function(resolve, reject) {
+          // load the image
+          map.loadImage(icon.url, function(error, data) {
+            // if error reject the promise
+            if (error) {
+              console.log(`Error with ${icon.id}`);
+              console.error(error);
+              reject(error);
+            } else {
+              // return the data in the icon
+              resolve([icon, data]);
+            }
+
+          });
+        });
+      });
+
+
+      map.on('load', function() {
+        Promise
+          .all(image_promises)
+          .then(icons => {
+            // Add the icons to the map
+            icons.forEach(icon_data => {
+              var icon = icon_data[0];
+              var data = icon_data[1];
+              map.addImage(icon.id, data);
+            });
+            // Check if images are ready
+            console.log(icons.map(icon => map.hasImage(icon[0].id)));
+          });
+
+
+        map.addSource('baltic', {
+          'type': 'geojson',
+          'data': 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/Baltic_MPA.geojson'
+        });
+
+
+        map.addSource('ships_cluster_true', {
+          type: 'geojson',
+          data: 'https://meri.digitraffic.fi/api/v1/locations/latest',
+          cluster: cluster_condition,
+          clusterMaxZoom: 12, // Max zoom to cluster points on
+          clusterRadius: 20, // Radius of each cluster when clustering points
+        });
+
+        map.addSource('ships_cluster_false', {
+          type: 'geojson',
+          data: 'https://meri.digitraffic.fi/api/v1/locations/latest',
+          cluster: false,
+          clusterMaxZoom: 12, // Max zoom to cluster points on
+          clusterRadius: 40, // Radius of each cluster when clustering points
+        });
+
+        map.addLayer({
+          id: 'baltic_mpa',
+          type: 'fill',
+          source: 'baltic',
+          layout: {
+            'visibility': 'visible'
+          },
+          paint: {
+            'fill-color': '#088',
+            'fill-opacity': 0.2
+          }
+        });
+
+
+        map.addLayer({
+          id: 'clusters',
+          type: 'symbol',
+          source: 'ships_cluster_true',
+          filter: ['has', 'point_count'],
+          layout: {
+            'visibility': 'visible',
+            'icon-image': 'clustered_ship_icon',
+            'icon-size': 0.04,
+            'icon-allow-overlap': true
+          },
+        });
+
+
+        map.addLayer({
+          id: 'clusters-count-bg',
+          type: 'circle',
+          source: 'ships_cluster_true',
+          filter: ['has', 'point_count'],
+          layout: {
+            'visibility': 'visible'
+          },
+          paint: {
+            'circle-color': '#b9e3ee',
+            'circle-radius': 9,
+            'circle-translate': [-15, -15],
+          },
+        });
+
+        map.addLayer({
+          id: 'cluster-count',
+          type: 'symbol',
+          source: 'ships_cluster_true',
+          filter: ['has', 'point_count'],
+          paint: {
+            'text-translate': [-15, -15],
+            "text-color": "black"
+          },
+          layout: {
+            'visibility': 'visible',
+            'text-field': '{point_count_abbreviated}',
+            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            'text-size': 10,
+            'text-allow-overlap': true,
+          },
+
+        });
+
+
+        map.addLayer({
+          id: 'unclustered-point_cluster_true',
+          type: 'symbol',
+          source: 'ships_cluster_true',
+          filter: ['!', ['has', 'point_count']],
+          layout: {
+            'visibility': 'visible',
+            'icon-image': [
+              'match', ['get', 'navStat'], // Use the result 'navStat' property
+              0, 'unclustered_ship_underway_engine_icon',
+              1, 'unclustered_ship_anchored_icon',
+              3, 'unclustered_ship_restricted_maneuverability_icon',
+              5, 'unclustered_ship_moored_icon',
+              8, 'unclustered_ship_underway_sailing_icon',
+              7, 'unclustered_ship_fishing_icon',
+              15, 'unclustered_ship_undefined_icon',
+
+              'unclustered_ship_other_icon' // any other navStat values
+            ],
+            //'icon-image': 'unclustered_ship_icon',
+            'icon-size': 0.5,
+            'icon-rotate': ['get', 'heading'],
+            'icon-allow-overlap': true
+          }
+        });
+
+        map.addLayer({
+          id: 'unclustered-point_cluster_false',
+          type: 'symbol',
+          source: 'ships_cluster_false',
+          filter: ['!', ['has', 'point_count']],
+          layout: {
+            'visibility': 'none',
+            'icon-image': [
+              'match', ['get', 'navStat'], // Use the result 'navStat' property
+              0, 'unclustered_ship_underway_engine_icon',
+              1, 'unclustered_ship_anchored_icon',
+              3, 'unclustered_ship_restricted_maneuverability_icon',
+              5, 'unclustered_ship_moored_icon',
+              8, 'unclustered_ship_underway_sailing_icon',
+              7, 'unclustered_ship_fishing_icon',
+              15, 'unclustered_ship_undefined_icon',
+
+              'unclustered_ship_other_icon' // any other navStat values
+            ],
+            //'icon-image': 'unclustered_ship_icon',
+            'icon-size': 0.5,
+            'icon-rotate': ['get', 'heading'],
+            'icon-allow-overlap': true
+          }
+        });
+
+
+        // inspect a cluster on click
+        map.on('click', 'clusters', function(e) {
+          var features = map.queryRenderedFeatures(e.point, {
+            layers: ['clusters']
+          });
+          var clusterId = features[0].properties.cluster_id;
+          map.getSource('ships_cluster_true').getClusterExpansionZoom(
+            clusterId,
+            function(err, zoom) {
+              if (err) return;
+
+              map.easeTo({
+                center: features[0].geometry.coordinates,
+                zoom: zoom
+              });
+            }
+          );
+        });
+
+
+
+        // When a click event occurs on a feature in
+        // the unclustered-point layer, open a popup at
+        // the location of the feature, with
+        // description HTML from its properties.
+        map.on('click', 'unclustered-point_cluster_true', function(e) {
+          var coordinates = e.features[0].geometry.coordinates.slice();
+          var navStat = e.features[0].properties.navStat;
+          var mmsi = e.features[0].properties.mmsi;
+          var posAcc = e.features[0].properties.posAcc;
+          var heading = e.features[0].properties.heading
+          var timestamp = e.features[0].properties.timestamp;
+          var timestampExternal = e.features[0].properties.timestampExternal;
+
+
+          // Ensure that if the map is zoomed out such that
+          // multiple copies of the feature are visible, the
+          // popup appears over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(
+              'MMSI: ' + mmsi +
+              '<br> VavStat: ' + navStat +
+              '<br> Position Accurate: ' + posAcc +
+              '<br> Vessel Heading: ' + heading +
+              '<br> Timestamp: ' + timestamp +
+              '<br> Timestamp (External): ' + timestampExternal
+            )
+            .addTo(map);
+        });
+
+        map.on('click', 'unclustered-point_cluster_false', function(e) {
+          var coordinates = e.features[0].geometry.coordinates.slice();
+          var navStat = e.features[0].properties.navStat;
+          var mmsi = e.features[0].properties.mmsi;
+          var posAcc = e.features[0].properties.posAcc;
+          var heading = e.features[0].properties.heading
+          var timestamp = e.features[0].properties.timestamp;
+          var timestampExternal = e.features[0].properties.timestampExternal;
+
+
+          // Ensure that if the map is zoomed out such that
+          // multiple copies of the feature are visible, the
+          // popup appears over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(
+              'MMSI: ' + mmsi +
+              '<br> VavStat: ' + navStat +
+              '<br> Position Accurate: ' + posAcc +
+              '<br> Vessel Heading: ' + heading +
+              '<br> Timestamp: ' + timestamp +
+              '<br> Timestamp (External): ' + timestampExternal
+            )
+            .addTo(map);
+        });
+
+        map.on('click', 'baltic_mpa', function(e) {
+          var coordinates = e.lngLat
+          var wdpa_pid = e.features[0].properties.WDPA_PID;
+          var name = e.features[0].properties.NAME;
+          var desig_eng = e.features[0].properties.DESIG_ENG;
+          var desig_typ = e.features[0].properties.DESIG_TYPE;
+          var marine = e.features[0].properties.MARINE
+          var status = e.features[0].properties.STATUS;
+          var iso3 = e.features[0].properties.ISO3;
+
+
+          // Ensure that if the map is zoomed out such that
+          // multiple copies of the feature are visible, the
+          // popup appears over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(
+              'WDPA PID: ' + wdpa_pid +
+              '<br> Name: ' + name +
+              '<br> Designation (English): ' + desig_eng +
+              '<br> Designation Type: ' + desig_typ +
+              '<br> Marine Type: ' + marine +
+              '<br> MPA Status: ' + status +
+              '<br> ISO3: ' + iso3
+            )
+            .addTo(map);
+        });
+
+
+
+
+        map.on('mouseenter', 'clusters', function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'clusters', function() {
+          map.getCanvas().style.cursor = '';
+        });
+
+        map.on('mouseenter', 'baltic_mpa', function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'baltic_mpa', function() {
+          map.getCanvas().style.cursor = '';
+        });
+
+        map.on('mouseenter', 'unclustered-point_cluster_true', function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'unclustered-point_cluster_true', function() {
+          map.getCanvas().style.cursor = '';
+        });
+
+        map.on('mouseenter', 'unclustered-point_cluster_false', function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', 'unclustered-point_cluster_false', function() {
+          map.getCanvas().style.cursor = '';
+        });
+
+
+
+        toggleLayer(['clusters', 'clusters-count-bg', 'cluster-count', 'unclustered-point_cluster_true'], 'Clustered');
+        toggleLayer(['unclustered-point_cluster_false'], 'Unclustered');
+        toggleLayer(['baltic_mpa'], 'Marine Protected Areas');
+
+
+
+        function toggleLayer(ids, name) {
+          var link = document.createElement('a');
+          link.href = '#';
+          link.className = 'active';
+          link.textContent = name;
+
+          link.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            for (layers in ids) {
+              var visibility = map.getLayoutProperty(ids[layers], 'visibility');
+              if (visibility === 'visible') {
+                map.setLayoutProperty(ids[layers], 'visibility', 'none');
+                this.className = '';
+              } else {
+                this.className = 'active';
+                map.setLayoutProperty(ids[layers], 'visibility', 'visible');
+              }
+            }
+
+          };
+
+          var layers = document.getElementById('menu');
+          layers.appendChild(link);
+        }
+
+
+      });
+
+    </script>
+
+  </body>
+
+</html>
