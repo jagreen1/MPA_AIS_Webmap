@@ -270,8 +270,8 @@
           type: 'geojson',
           data: 'https://meri.digitraffic.fi/api/v1/locations/latest',
           cluster: cluster_condition,
-          clusterMaxZoom: 12, // Max zoom to cluster points on
-          clusterRadius: 20, // Radius of each cluster when clustering points
+          clusterMaxZoom: 10, // Max zoom to cluster points on
+          clusterRadius: 15, // Radius of each cluster when clustering points
         });
 
         map.addSource('ships_cluster_false', {
