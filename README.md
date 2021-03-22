@@ -74,10 +74,17 @@ Baltic Sea MPA Geojson Dataset - [Geojson Feature Collection](https://raw.github
 <ins>Map Icons:</ins> <br>
 
 Clustered Ship Icons:
+<img src="https://cdn2.iconfinder.com/data/icons/maps-and-navigation-glyph-1/128/41-512.png" height="40" width="40">
 
 Unclustered (Color-Coded) Ship Icons:
-![Blue Ship](https://jagreen1.github.io/MPA_AIS_Webmap/blue_ship.png)
 
+![Yellow Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow_ship.png)
+![Dark Purple Ship](https://jagreen1.github.io/MPA_AIS_Webmap/dark_purple_ship.png)
+![Yellow Green Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow_green_ship.png)
+![Red Ship](https://jagreen1.github.io/MPA_AIS_Webmap/red_ship.png)
+![Orange Ship](https://jagreen1.github.io/MPA_AIS_Webmap/orange_ship.png)
+![Purple Ship](https://jagreen1.github.io/MPA_AIS_Webmap/purple_ship.png)
+![Blue Ship](https://jagreen1.github.io/MPA_AIS_Webmap/blue_ship.png)
 
 
 *Note: All data in this WebMap are in WGS84 GCS.*
