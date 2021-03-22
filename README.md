@@ -21,8 +21,10 @@ United States| ORBCOMM| ORBCOMM Generation 2 Satellite Constellation
 United States| SpaceQuest | AprizeSat-3 & AprizeSat-4
 
 ## Project Development: 
-Locating openly avaliable AIS data proved incredibly challenging. I realize I had been niave in thinking that AIS data would be made freely avalaible. There are a plethora of companies and networks with AIS data APIs, however access must be purchased through api credits/substrictions or require setting up and providing your own AIS data to a network.
-The original plan of this project was to use AIS data to monitor near-real time marine vessel activity around Marine Protected Areas in the Indo-pacific. Illegal fishing and resource extraction activities (net/explosive/cyanide fishing, coral mining, mangrove cutting) within marine protected areas (MPAs) are significant issue althroughout the Indo-pacific. Illegal fishing vessels (primarily chinese) often try to hide their activities by turning off AIS systems. AIS and satellite monitoring are often used to track illegal fishing vessels.
+Locating openly avaliable AIS data proved incredibly challenging. I realize I had been niave in thinking that AIS data would be made freely avalaible. There are a plethora of companies and networks with AIS data APIs, however they can only be accessed through the purchasing of api credits/substrictions, or by providing your own AIS data to a shared network. <br>
+
+The original plan of this project was to use AIS data to monitor near-real time marine vessel activity around Marine Protected Areas in the Indo-pacific. Illegal fishing and resource extraction activities (net/explosive/cyanide fishing, coral mining, mangrove cutting) within marine protected areas (MPAs) are significant issue althroughout the Indo-pacific. Illegal fishing vessels (primarily chinese) often try to hide their activities by turning off AIS systems. AIS and satellite monitoring are often used to track illegal fishing vessels. <br>
+
 Unfortunately, none of the various Global AIS data products are freely avaliable. After considerable searching I identified open acess AIS data for marine vessels in the Baltic Sea, and transitions the focus of this map to the Baltic Region. If given access to any of the global AIS data products, this webmap can easily map any other part of the world just by modfying the input geojson api url.
 
 
