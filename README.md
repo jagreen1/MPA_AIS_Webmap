@@ -1,4 +1,3 @@
-# MPA_AIS_Webmap
 # Baltic Marine Protected Area and Near-Realtime Marine Vessel AIS Webmap:
 [Baltic Sea Near-Realtime Marine Vessel Activity Webmap](https://jagreen1.github.io/MPA_AIS_Webmap/Baltic_AIS_Webmap_Final.html) <br>
 
@@ -77,7 +76,28 @@ Unclustered (Color-Coded) Ship Icons:
 ## Reflective analysis:
 
 
+decisions/insight
+
+This webmap displays Marine Protecta Area (MPA) and near-realtime marine vessel AIS position/activity information throughout the Baltic Sea. It was designed for European marine traffic regulators and fishery management authorities such as the European Fisheries Control Agency. The objective of the webmap is to present near-real time monitoring of marine vessels to identify ships located in Marine Protected Areas (MPA) in the Baltic Sea. This webmap additionally give information about the navigation status (*NavStat*), helping to understand the a ships current activity and providing context for the location of the vessel. 
 
 
-## Critique Session: 
+Interactivity & Key Map Features
+
+This map was designed such that clustering was a central aspect of visualization. When the map is zoomed out, many of the marine vessels will overlap due to their close proximity. I designed a series of clustering layers such that all ships in a defined radius appear as ship icon, and the total number of ships within that cluster are displayed as a text value in a circle to the top right of the clustered ship icon. As the map is zoomed in and the location of multiple ships no longer fall within overlaping radius they will appear as one of a set different ship icons with various colors.
+
+Clustering can provide an improve viewing experience if the user only wishes to look in a specific area. However, clustering prevents the user from gaining a holistic or big-picture understanding. Therefore, I also created an unclustered layer that can be toggled on to display all ship points at once. I found that this layer was highly valuable in help to visualize marine routes/highways, something that is not expressed in the clustered view.  
+
+Another key aspect of the map is that the ships point in different direction based on their current *heading*. This works by rotating the map's ship icons according to the features' *heading* property. By default, the ship icons point North or 90°. The icons were therefore rotated by *heading* - 90.
+
+The layers toggle button in the upper left-corner of the map allows the user to turn the layeres on and off. When initially loaded only the MPA layer and Clustered Ships grouped layers have layout *visibility* values of "visible", while the Unclusterd Ships layer have a *visibiliity* of "none" and therefore not visible. When one of the three toggle buttons is clicked, the corresponding group of layers have their visibility properties switched; making them appear or disappear. Additionally, the buttons are also highlighted when the mouse moves over them, and change color when clicked or unclicked.
+
+When the clustered ship layers are clicked, the map zooms in and pans to the individual cluster. If the unclustered ship points are clicked a PopUp appears with  key AIS information including: Maritime Mobile Service Identity (MMSI), navigation status (NavStat), vessel heading, position accuracy, and timestamps. A PopUp is also displayed when the Marine Protected Area (MPA) features are clicked, providing information including WDPA parcel id, name, english designation, status, and ISO3 country code.
+
+
+UI Visuals/Map Style
+
+I created two text boxes for the title/description and the legend. The description box tells the user how to interact with the map, and the legend explains the different NavStat color scheme. These boxes were made to be partially transparent allowing the user to see the map underneath. Making the boxes fully opaque would clash with the underlying map. I choose to place the two text boxes on the right in such a way that they wouldn't take up to much space. The layer toggle button was placed in the upper left-corner as not to busy the right side of the map. I choose to use a light colored basemap that clearly highlights between land and sea. I originally intended on using a high-resolution satellite imagery layer, however the sea/ocean are very dark in satellite imagery which makes it difficult to see the ship icons. I showed it to some peers for advice and they recomended I stick to a brighter basemap for improved visibility. For the unclustered ship icons, I choose to use bright and solid coloration that clearly stand out from the light blue colored water. The vast majority of ships will always have a NavStat value of 0 indicating they are "under way using engine". I choose to color these ships bright yellow which contrasts most with the light blue water. Ships with a NavStat value of 7 and therefore "engaged in fishing" were colored bright red to provide for enhanced visibility. Red was also used because of its societal perception as a representation of "bad" or "negative", in this case fishing being a potentially harmful environmental activity.
+
+
+## Peer Critiques: 
 
