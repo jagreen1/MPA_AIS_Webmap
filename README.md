@@ -54,6 +54,8 @@ Unfortunately, none of the various Global AIS data products are freely avaliable
 This map features a custom map style that was developed in Mapbox Studio and downloaded as a json file.
 
 ## Data: 
+*Note: All data is in WGS84 GCS.*
+
 <ins>AIS Data:</ins> <br>
 Open source AIS information for the Baltic Region was obtain from the Finish transporation company Fintraffic.
 
@@ -84,9 +86,6 @@ Unclustered (Color-Coded) Ship Icons:
 ![Orange Ship](https://jagreen1.github.io/MPA_AIS_Webmap/orange_ship.png)
 ![Purple Ship](https://jagreen1.github.io/MPA_AIS_Webmap/purple_ship.png)
 ![Blue Ship](https://jagreen1.github.io/MPA_AIS_Webmap/blue_ship.png)
-
-
-*Note: All data in this WebMap are in WGS84 GCS.*
 
 ## Reflective analysis:
 
