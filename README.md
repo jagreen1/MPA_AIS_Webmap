@@ -68,8 +68,16 @@ Fintraffic Near-Realtime AIS Data API: https://meri.digitraffic.fi/api/v1/locati
 Marine Protected Area GIS data was sourced from the World Database on Protected Areas (WDPA), the most comprehensive global database of terrestrial and marine protected areas.
 A 1.3Gb shapefile of all Global Protected Areas was obtained from the WDPA website. In QGIS I selected the subset of all protected areas within the Baltic Region, and exported them into their own feature collection. As the WDPAI dataset is a combition of marine and terrestrial protected areas, I made sure to filter out all of the fully terrestrial protected areas. Next, I reduced the size of the file by simplified the coordinate precision by truncating the Lat/Long coordinate values from 15 to 8 decimal places. I also removed all attribute fields that were not going to be displayed in the map. Finally, this dataset was exported to GeoJson and uploaded to GitHub. <br>
 
-The World Database on Protected Areas (WDPA): https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA
+The World Database on Protected Areas (WDPA): https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA <br>
 Baltic Sea MPA Geojson Dataset - [Geojson Feature Collection](https://jagreen1.github.io/MPA_AIS_Webmap/Baltic_MPA.geojson) <br>
+
+<ins>Map Icons:</ins> <br>
+
+Clustered Ship Icons:
+
+Unclustered (Color-Coded) Ship Icons:
+![Example Map Screenshot](https://jagreen1.github.io/MPA_AIS_Webmap/blue_ship.png)
+
 
 
 *Note: All data in this WebMap are in WGS84 GCS.*
