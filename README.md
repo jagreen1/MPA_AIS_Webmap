@@ -63,8 +63,8 @@ Data for 2018 adult monarch butterfly sightings was obtained from the [Journey N
 The copyright-free monarch butterfly image used to represent the data points was obtained from (https://www.hiclipart.com). <br>
 
 
-
-Open source AIS data for the Baltic Region was obtain from the Finish transporation company Fintraffic.
+<ins>AIS Data:</ins>
+Open source AIS information for the Baltic Region was obtain from the Finish transporation company Fintraffic.
 
 Fintraffic Website: ttps://www.digitraffic.fi/
 
@@ -72,22 +72,21 @@ Fintraffic Marine Data Products: https://www.digitraffic.fi/meriliikenne/
 
 Fintraffic Near-Realtime AIS Data API: https://meri.digitraffic.fi/api/v1/locations/latest
 
-The World Database on Protected Areas (WDPA) - the most comprehensive global database on terrestrial and marine protected areas.
-https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA
 
+<ins>MPA Data:</ins>
+Marine Protected Area GIS data was sourced from the World Database on Protected Areas (WDPA), the most comprehensive global database of terrestrial and marine protected areas.
 A 1.3Gb shapefile of all Global Protected Areas was obtained from the WDPA website. In QGIS I selected the subset of all protected areas within the Baltic Region, and exported them into their own feature collection. As the WDPAI dataset is a combition of marine and terrestrial protected areas, I made sure to filter out all of the fully terrestrial protected areas. Next, I reduced the size of the file by simplified the coordinate precision by truncating the Lat/Long coordinate values from 15 to 8 decimal places. I also removed all attribute fields that were not going to be displayed in the map. Finally, this dataset was exported to GeoJson and uploaded to GitHub. 
 
+The World Database on Protected Areas (WDPA): https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA
+Baltic Sea MPA Geojson Dataset - [Geojson Feature Collection](https://jagreen1.github.io/MPA_AIS_Webmap/Baltic_MPA.geojson)
 
 
+*Note: All data in this WebMap are in WGS84 GCS.*
 
 ## Reflective analysis:
-I have designed an interactive web map that displays monarch butterfly (*Danaus plexippus*) first adult sightings data in the fall and winter of 2018 as point features. The map is focused on North America with the majority of data points being located in the United States, Canada, and Mexico. It features a slider bar that allows the user to filter through the sighting data time series from August 1st to December 31st.  The data points appear as monarch butterfly images, and when clicked on a popup window is displayed containing metadata about the sighting event including the date, town, and province or state. This map is intended to help wildlife conservation scientists and monarch butterfly enthusiasts visualize the monarch butterfly’s annual southern migration before winter in the northern hemisphere. 
-
-When creating the map I choose to apply a minimalistic-environmental style that emphasized the butterfly sighting data points. This required using light and low saturated coloration, few place labels and icons, and limiting land cover and land use layers to forests, parks, and greenspaces.  The map is meant to be viewed at a large spatial scale, so when zoomed out the terrain is pale green and white. This allows the bright orange butterfly data points to stand out. Hillshade and 3D elevation used to provide a sense of terrain and highlight the inverse relationship between butterfly distribution and high elevation. Although the map is best viewed at a large scale, I designed the land cover and land use layers such that if you zoom to a smaller scale the greenspaces, forests, and parks appear in light green. These land class layers provide context and help explain the locations of butterflying sightings. I found that at a small spatial scale the high number of place labels and icons heavily littered the map and provided for a poor viewing experience. As a result, I choose to omit labels and icons for buildings, roads, or settlements as they were irrelevant to the environmental theme and took focus away from the butterfly points. Overall I believe my choice of minimalist stylization worked well for showing the butterfly migrations, as it places focus on the two key variables of terrain and data. 
-
-Taking this map forward, I would implement additional technical features such as a play button that loops through the butterfly data points or a legend with background information and links to the data source. I would also look into including a polygon layer showing the species coverage of common milkweed (*Asclepias syriaca*), the primary host of the monarch butterfly.
 
 
-Paragraph describing your map critique sessions as well as any other collaborations or help: A paragraph that describes any help you received or offered others, including how you responded to your critique session.
+
+
 ## Critique Session: 
-I have strong programing experience and did not require any personal help when designing the map. Instead I used official Mapbox tutorial code as a reference and applied my own programing knowledge to create the desired interactive features.
+
