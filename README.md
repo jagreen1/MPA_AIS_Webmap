@@ -77,7 +77,6 @@ Clustered Ship Icons:
 <img src="https://cdn2.iconfinder.com/data/icons/maps-and-navigation-glyph-1/128/41-512.png" height="40" width="40">
 
 Unclustered (Color-Coded) Ship Icons:
-
 ![Yellow Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow_ship.png)
 ![Dark Purple Ship](https://jagreen1.github.io/MPA_AIS_Webmap/dark_purple_ship.png)
 ![Yellow Green Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow-green_ship.png)
