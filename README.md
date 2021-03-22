@@ -29,7 +29,12 @@ Unfortunately, none of the various Global AIS data products are freely avaliable
 
 
 ## Webmap Screenshot:
-![Example Map Screenshot]()
+Example of Clustered Marine Vessels 
+<img src="https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/gh-pages/Lab2_Example_Screenshot_Clustered.PNG">
+
+Example of Unclustered Marine Vessels
+<img src="https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/gh-pages/Lab2_Example_Screenshot_Unclustered.PNG">
+
 
 ## Mapbox Studio Style:
 [Custom Map Style](https://jagreen1.github.io/MonarchButterflyWebMap/Minimalist-Environmental_Style.json) <br>
