@@ -54,31 +54,22 @@ Unfortunately, none of the various Global AIS data products are freely avaliable
 This map features a custom map style that was developed in Mapbox Studio and downloaded as a json file.
 
 ## Data: 
-Data Source - [Journey North Migration Data](https://journeynorth.org/sightings/querylist.html?season=fall&map=monarch-adult-fall&year=2018&submit=View+Data)<br>
-Monarch Sighting Geojson Data - [Geojson Feature Collection](https://jagreen1.github.io/MonarchButterflyWebMap/2018MonarchSightings.geojson)<br>
-
-Data for 2018 adult monarch butterfly sightings was obtained from the [Journey North' citizen science website](https://journeynorth.org/sightings/querylist.html?season=fall&map=monarch-adult-fall&year=2018&submit=View+Data). Data from public reported sightings between August 1, 2018 and December 31, 2018 were entered into a csv file. The data was then converted into a [geojson feature collection](https://jagreen1.github.io/MonarchButterflyWebMap/2018MonarchSightings.geojson) following the WGS84 GCS, using the Open Data Institute's 'CSV to GeoJSON' webtool. 
-
-[Monarch Butterfly Image](https://www.hiclipart.com/free-transparent-background-png-clipart-qdsai) <br>
-The copyright-free monarch butterfly image used to represent the data points was obtained from (https://www.hiclipart.com). <br>
-
-
-<ins>AIS Data:</ins>
+<ins>AIS Data:</ins> <br>
 Open source AIS information for the Baltic Region was obtain from the Finish transporation company Fintraffic.
 
 Fintraffic Website: ttps://www.digitraffic.fi/
 
 Fintraffic Marine Data Products: https://www.digitraffic.fi/meriliikenne/
 
-Fintraffic Near-Realtime AIS Data API: https://meri.digitraffic.fi/api/v1/locations/latest
+Fintraffic Near-Realtime AIS Data API: https://meri.digitraffic.fi/api/v1/locations/latest <br>
 
 
-<ins>MPA Data:</ins>
+<ins>MPA Data:</ins> <br>
 Marine Protected Area GIS data was sourced from the World Database on Protected Areas (WDPA), the most comprehensive global database of terrestrial and marine protected areas.
-A 1.3Gb shapefile of all Global Protected Areas was obtained from the WDPA website. In QGIS I selected the subset of all protected areas within the Baltic Region, and exported them into their own feature collection. As the WDPAI dataset is a combition of marine and terrestrial protected areas, I made sure to filter out all of the fully terrestrial protected areas. Next, I reduced the size of the file by simplified the coordinate precision by truncating the Lat/Long coordinate values from 15 to 8 decimal places. I also removed all attribute fields that were not going to be displayed in the map. Finally, this dataset was exported to GeoJson and uploaded to GitHub. 
+A 1.3Gb shapefile of all Global Protected Areas was obtained from the WDPA website. In QGIS I selected the subset of all protected areas within the Baltic Region, and exported them into their own feature collection. As the WDPAI dataset is a combition of marine and terrestrial protected areas, I made sure to filter out all of the fully terrestrial protected areas. Next, I reduced the size of the file by simplified the coordinate precision by truncating the Lat/Long coordinate values from 15 to 8 decimal places. I also removed all attribute fields that were not going to be displayed in the map. Finally, this dataset was exported to GeoJson and uploaded to GitHub. <br>
 
 The World Database on Protected Areas (WDPA): https://www.protectedplanet.net/en/thematic-areas/wdpa?tab=WDPA
-Baltic Sea MPA Geojson Dataset - [Geojson Feature Collection](https://jagreen1.github.io/MPA_AIS_Webmap/Baltic_MPA.geojson)
+Baltic Sea MPA Geojson Dataset - [Geojson Feature Collection](https://jagreen1.github.io/MPA_AIS_Webmap/Baltic_MPA.geojson) <br>
 
 
 *Note: All data in this WebMap are in WGS84 GCS.*
