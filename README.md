@@ -80,7 +80,7 @@ Unclustered (Color-Coded) Ship Icons:
 
 ![Yellow Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow_ship.png)
 ![Dark Purple Ship](https://jagreen1.github.io/MPA_AIS_Webmap/dark_purple_ship.png)
-![Yellow Green Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow_green_ship.png)
+![Yellow Green Ship](https://jagreen1.github.io/MPA_AIS_Webmap/yellow-green_ship.png)
 ![Red Ship](https://jagreen1.github.io/MPA_AIS_Webmap/red_ship.png)
 ![Orange Ship](https://jagreen1.github.io/MPA_AIS_Webmap/orange_ship.png)
 ![Purple Ship](https://jagreen1.github.io/MPA_AIS_Webmap/purple_ship.png)
