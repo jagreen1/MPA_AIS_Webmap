@@ -1,8 +1,8 @@
 # MPA_AIS_Webmap
-# Baltic Marine Protected Area and Marine Vessel AIS Webmap:
+# Baltic Marine Protected Area and Near-Realtime Marine Vessel AIS Webmap:
 [Baltic Sea Near-Realtime Marine Vessel Activity Webmap](https://jagreen1.github.io/MPA_AIS_Webmap/Baltic_AIS_Webmap_Final.html) <br>
 
-This webmap displays near-realtime information about 
+This webmap displays Marine Protecta Area (MPA) and near-realtime marine vessel AIS position/activity information throughout the Baltic Sea. 
 
 Automatic Identification System (AIS) is automatic marine vessel tracking system used for collision avoidance, identification and location and activity information. Vessels equipped with AIS transponders/transceivers and VHF Radio automatically broadcast information at regular intervals.
 AIS provide information such as unique identification (ex. Maritime Mobile Service Identity (MMSI)), position (GPS), navigational status (NavStat), course, heading, and speed. This navigation and traffic information acts in complement of marine radar.
@@ -10,35 +10,15 @@ Ships equipped with AIS transceivers can be tracked by coastal AIS base stations
 
 **Examples of Satellite-based AIS:**
 
-Canada
-exactEarth/L3Harris Corporation
-- Iridium NEXT Satellite Constellation
-
-Denmark
-Aalborg University/Danish Maritime Safety Administration
-- AAUSAT3
-
-India
-Indian Space Research Organisation
-- Resourcesat-2 (contains a S-AIS payload)
-
-Luxembourg
-Luxspace/ORBCOMM  
-- VesselSat-1
-- VesselSat-2
-
-Norway
-Kongsberg Seatex
-- AISSat-1
-
-United States
-ORBCOMM
-- ORBCOMM Generation 2 Satellites
-
-United States
-SpaceQuest
-- AprizeSat-3
-- AprizeSat-4
+Country | Insitution/Organization/Company | Satellite/Constellation
+------------- | ------------ | -------------
+Canada | exactEarth/L3Harris Corporation | Iridium NEXT Satellite Constellation
+Denmark | Aalborg University/Danish Maritime Safety Administration| AAUSAT3
+India | Indian Space Research Organisation | Resourcesat-2
+Luxembourg|Luxspace/ORBCOMM |  VesselSat-1 & VesselSat-2
+Norway| Kongsberg Seatex| AISSat-1
+United States| ORBCOMM| ORBCOMM Generation 2 Satellite Constellation
+United States| SpaceQuest | AprizeSat-3 & AprizeSat-4
 
 ## Project Development: 
 Locating openly avaliable AIS data proved incredibly challenging. I realize I had been niave in thinking that AIS data would be made freely avalaible. There are a plethora of companies and networks with AIS data APIs, however access must be purchased through api credits/substrictions or require setting up and providing your own AIS data to a network.
@@ -47,7 +27,7 @@ Unfortunately, none of the various Global AIS data products are freely avaliable
 
 
 ## Webmap Screenshot:
-![Example Map Screenshot](https://jagreen1.github.io/MonarchButterflyWebMap/Example_WebMap_Screenshot.PNG)
+![Example Map Screenshot]()
 
 ## Mapbox Studio Style:
 [Custom Map Style](https://jagreen1.github.io/MonarchButterflyWebMap/Minimalist-Environmental_Style.json) <br>
