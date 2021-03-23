@@ -139,9 +139,9 @@
     </style>
 
     <div id="map"></div> //Create the map element
-    <div class='map-overlay' id='legend'></div> //Create the map-overlay elements class (title/instructions and legend)
+    <div class='map-overlay' id='legend'></div> <!-- Create the map-overlay elements class (title/instructions and legend) -->
     <div class="map-overlay" id="features">
-      <h2>Baltic AIS Live Vessel Activity</h2> //Title
+      <h2>Baltic AIS Live Vessel Activity</h2>   <!-- Title of the map -->
       <div id="pd"> //Instructions
         <p>Scroll or click on ship clusters to zoom in on a group of vessels. </p> 
         <p>Click on marine protected area polygons and marine vessel points for additional information.</p>
@@ -150,9 +150,10 @@
       </div>
     </div>
 
-    <div id="vessel-legend" class="legend"> //Create a legend iwth colors correspond to the ship icons and NavStat codes
+    <div id="vessel-legend" class="legend"> <!-- Create a legend with colors correspond to the ship icons and NavStat codes -->
       <h4>Vessel Navigation Status</h4>
       <div><span style="background-color: #ecd155"></span>NavStat: 0 = under way using engine</div>
+      <div><span style="background-color: #8bb95d"></span>NavStat: 1 = at anchor</div>
       <div><span style="background-color: #5d68a9"></span>NavStat: 3 = restricted maneuverability</div>
       <div><span style="background-color: #c1c85b"></span>NavStat: 5 = moored</div>
       <div><span style="background-color: #d54879"></span>NavStat: 7 = engaged in fishing</div>
