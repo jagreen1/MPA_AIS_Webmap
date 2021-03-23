@@ -82,7 +82,7 @@ This map was designed such that clustering was a central aspect of visualization
 
 Clustering can provide an improve viewing experience if the user only wishes to look in a specific area. However, clustering prevents the user from gaining a holistic or big-picture understanding. Therefore, I also created an unclustered layer that can be toggled on to display all ship points at once. I found that this layer was highly valuable in help to visualize marine routes/highways, something that is not expressed in the clustered view.  
 
-Another key aspect of the map is that the ships point in different direction based on their current *heading*. This works by rotating the map's ship icons according to the features' *heading* property. By default, the ship icons point North or 90°. The icons were therefore rotated by *heading* - 90.
+Another key aspect of the map is that the ships point in different direction based on their current *heading*. This works by rotating the map's ship icons according to the features' *heading* property. 
 
 The layers toggle button in the upper left-corner of the map allows the user to turn the layeres on and off. When initially loaded only the MPA layer and Clustered Ships grouped layers have layout *visibility* values of "visible", while the Unclusterd Ships layer have a *visibiliity* of "none" and therefore not visible. When one of the three toggle buttons is clicked, the corresponding group of layers have their visibility properties switched; making them appear or disappear. Additionally, the buttons are also highlighted when the mouse moves over them, and change color when clicked or unclicked.
 
