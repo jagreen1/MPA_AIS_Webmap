@@ -112,8 +112,6 @@
         width: 230px;
       }
 
-
-
       .legend {
         background: rgba(255, 255, 255, 0.8);
         border-radius: 3px;
@@ -140,24 +138,21 @@
 
     </style>
 
-
-    <div id="map"></div>
-
-
-    <div class='map-overlay' id='legend'></div>
+    <div id="map"></div> //Create the map element
+    <div class='map-overlay' id='legend'></div> //Create the map-overlay elements class (title/instructions and legend)
     <div class="map-overlay" id="features">
-      <h2>Baltic AIS Live Vessel Activity</h2>
-      <div id="pd">
-        <p>Scroll or click on ship clusters to zoom in on a group of vessels. </p>
+      <h2>Baltic AIS Live Vessel Activity</h2> //Title
+      <div id="pd"> //Instructions
+        <p>Scroll or click on ship clusters to zoom in on a group of vessels. </p> 
         <p>Click on marine protected area polygons and marine vessel points for additional information.</p>
         <p>Turn clustered and unclustered vessel layers on and off using the buttons located in the top left corner.
         </p>
       </div>
     </div>
 
-    <div id="vessel-legend" class="legend">
+    <div id="vessel-legend" class="legend"> //Create a legend iwth colors correspond to the ship icons and NavStat codes
       <h4>Vessel Navigation Status</h4>
-      <div><span style="background-color: #ecd155"></span>NavStat: 1 = at anchor</div>
+      <div><span style="background-color: #ecd155"></span>NavStat: 0 = under way using engine</div>
       <div><span style="background-color: #5d68a9"></span>NavStat: 3 = restricted maneuverability</div>
       <div><span style="background-color: #c1c85b"></span>NavStat: 5 = moored</div>
       <div><span style="background-color: #d54879"></span>NavStat: 7 = engaged in fishing</div>
@@ -172,12 +167,12 @@
     <script>
       mapboxgl.accessToken = 'pk.eyJ1IjoiamdyZWVuMSIsImEiOiJja2xhMHEwbDMydHFqMzB0N3FxdTAyYjl6In0.Hv__9wnsQJpvHjh-zLgZMw';
 
-      var bounds = [
+      var bounds = [ //Set map bounds, preventing the user from leaving the Baltic Region
         [-2, 51], // Southwest coordinates
         [40, 69] // Northeast coordinates
       ];
 
-      var icons = [{
+      var icons = [{ //Define all the map icons, assigning an id and providing a source for the image files
           id: 'clustered_ship_icon',
           url: 'https://cdn2.iconfinder.com/data/icons/maps-and-navigation-glyph-1/128/41-512.png'
         }, {
@@ -212,31 +207,29 @@
         }
       ];
 
-      var cluster_condition = true;
+      var cluster_condition = true; //Set clustering as true for the later added ships_cluster_true source
 
-      var map = new mapboxgl.Map({
+      var map = new mapboxgl.Map({ //Create the map layer and define the basemap style
         container: 'map',
-        //style: 'mapbox://styles/mapbox/satellite-v9',
         style: 'mapbox://styles/mapbox/outdoors-v11',
-
-        center: [20, 60],
+        center: [20, 60], //Set the center of the map to the Baltic Region
         zoom: 3.5,
         attributionControl: false,
-        maxBounds: bounds // Sets bounds as max
+        maxBounds: bounds //Sets bounds as max
       });
 
       var image_promises = icons.map(icon => {
-        // return a promise per icon
+        //Return a promise for each icon image
         return new Promise(function(resolve, reject) {
-          // load the image
+          //Load the icon image
           map.loadImage(icon.url, function(error, data) {
-            // if error reject the promise
+            //If there is an error reject the promise
             if (error) {
               console.log(`Error with ${icon.id}`);
               console.error(error);
               reject(error);
             } else {
-              // return the data in the icon
+              //Return the data in the icon
               resolve([icon, data]);
             }
 
@@ -245,49 +238,49 @@
       });
 
 
-      map.on('load', function() {
+      map.on('load', function() { //Load all the sources/layers/data that will be added to the map
         Promise
           .all(image_promises)
           .then(icons => {
-            // Add the icons to the map
+            //Add the icons to the map
             icons.forEach(icon_data => {
               var icon = icon_data[0];
               var data = icon_data[1];
               map.addImage(icon.id, data);
             });
-            // Check if images are ready
+            //Check to see if the icon images are ready
             console.log(icons.map(icon => map.hasImage(icon[0].id)));
           });
 
 
-        map.addSource('baltic', {
+        map.addSource('baltic', { //Add the Baltic MPA dataset as a source
           'type': 'geojson',
           'data': 'https://raw.githubusercontent.com/jagreen1/MPA_AIS_Webmap/master/Baltic_MPA.geojson'
         });
 
 
-        map.addSource('ships_cluster_true', {
+        map.addSource('ships_cluster_true', { //Add the clustered ship dataset as a source
           type: 'geojson',
           data: 'https://meri.digitraffic.fi/api/v1/locations/latest',
           cluster: cluster_condition,
-          clusterMaxZoom: 10, // Max zoom to cluster points on
-          clusterRadius: 15, // Radius of each cluster when clustering points
+          clusterMaxZoom: 10, // Set the max zoom on whic to cluster points
+          clusterRadius: 15, // Set the radius within which overlaping points are clustered
         });
 
-        map.addSource('ships_cluster_false', {
+        map.addSource('ships_cluster_false', { //Add the unclustered ship dataset as a source
           type: 'geojson',
-          data: 'https://meri.digitraffic.fi/api/v1/locations/latest',
+          data: 'https://meri.digitraffic.fi/api/v1/locations/latest', //Call the Fintraffic AIS data api
           cluster: false,
           clusterMaxZoom: 12, // Max zoom to cluster points on
           clusterRadius: 40, // Radius of each cluster when clustering points
         });
 
-        map.addLayer({
+        map.addLayer({ //Add the Baltic MPA dataset to the map
           id: 'baltic_mpa',
           type: 'fill',
           source: 'baltic',
           layout: {
-            'visibility': 'visible'
+            'visibility': 'visible' // When first loaded the Baltic MPA dataset is visible
           },
           paint: {
             'fill-color': '#088',
@@ -296,47 +289,47 @@
         });
 
 
-        map.addLayer({
+        map.addLayer({ //Add the clustered ship dataset to the map
           id: 'clusters',
           type: 'symbol',
           source: 'ships_cluster_true',
           filter: ['has', 'point_count'],
           layout: {
-            'visibility': 'visible',
-            'icon-image': 'clustered_ship_icon',
+            'visibility': 'visible', // When first loaded the clustered ship icons are visible
+            'icon-image': 'clustered_ship_icon', //Call the clustered ship icon
             'icon-size': 0.04,
             'icon-allow-overlap': true
           },
         });
 
 
-        map.addLayer({
+        map.addLayer({ //Add the clustered count circle to the map, this layer surrounds the cluster count text
           id: 'clusters-count-bg',
-          type: 'circle',
+          type: 'circle', // This is the only circle layer in the map, the rest are symbols
           source: 'ships_cluster_true',
           filter: ['has', 'point_count'],
           layout: {
-            'visibility': 'visible'
+            'visibility': 'visible' // When first loaded the cluster count text value is visible
           },
           paint: {
-            'circle-color': '#b9e3ee',
+            'circle-color': '#b9e3ee', //A light blue color is used for good visibility
             'circle-radius': 9,
-            'circle-translate': [-15, -15],
+            'circle-translate': [-15, -15], //The circle is offset to the upper left of the clustered ship icon
           },
         });
 
-        map.addLayer({
+        map.addLayer({ //Add the clustered count text to the map, this appears centered ontop off the clusters count circles 
           id: 'cluster-count',
           type: 'symbol',
           source: 'ships_cluster_true',
           filter: ['has', 'point_count'],
           paint: {
-            'text-translate': [-15, -15],
-            "text-color": "black"
+            'text-translate': [-15, -15], //The text is offset to the upper left of the clustered ship icon
+            "text-color": "black" //Black is used to stand out on the light blue background of the clustered count circle
           },
           layout: {
-            'visibility': 'visible',
-            'text-field': '{point_count_abbreviated}',
+            'visibility': 'visible', // When first loaded the clusterred count text layer is visible
+            'text-field': '{point_count_abbreviated}', //this layer uses the Mapbox cluster function to display the number of clustered points (point_count)
             'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
             'text-size': 10,
             'text-allow-overlap': true,
@@ -345,60 +338,57 @@
         });
 
 
-        map.addLayer({
+        map.addLayer({ //Add the unclustered ship icons text to the map, this is the final layer when fully zoomed in on a cluster
           id: 'unclustered-point_cluster_true',
           type: 'symbol',
           source: 'ships_cluster_true',
-          filter: ['!', ['has', 'point_count']],
+          filter: ['!', ['has', 'point_count']], // This layer only appears when the point_count value is none, meaning no overlapping ship points
           layout: {
-            'visibility': 'visible',
+            'visibility': 'visible', // When first loaded the unclustered ship icons are visible
             'icon-image': [
-              'match', ['get', 'navStat'], // Use the result 'navStat' property
+              'match', ['get', 'navStat'], // The result 'navStat' property values are called and used to assign the different colored ship icons
               0, 'unclustered_ship_underway_engine_icon',
               1, 'unclustered_ship_anchored_icon',
               3, 'unclustered_ship_restricted_maneuverability_icon',
               5, 'unclustered_ship_moored_icon',
-              8, 'unclustered_ship_underway_sailing_icon',
               7, 'unclustered_ship_fishing_icon',
+              8, 'unclustered_ship_underway_sailing_icon',
               15, 'unclustered_ship_undefined_icon',
 
-              'unclustered_ship_other_icon' // any other navStat values
+              'unclustered_ship_other_icon' // If a ship's 'navStat' property is none of the number above it is assigned this default colored icon (blue)
             ],
-            //'icon-image': 'unclustered_ship_icon',
             'icon-size': 0.5,
-            'icon-rotate': ['get', 'heading'],
+            'icon-rotate': ['get', 'heading' - 90], //The direction of the ship is set by rotating based on the AIS heading - 90 deg (the starting direction of the icon)
             'icon-allow-overlap': true
           }
         });
 
-        map.addLayer({
+        map.addLayer({ //Add the unclustered ship icons text to the map, this layer is all ship points with no clustering period
           id: 'unclustered-point_cluster_false',
           type: 'symbol',
           source: 'ships_cluster_false',
-          filter: ['!', ['has', 'point_count']],
+          filter: ['!', ['has', 'point_count']], // This layer only appears when the point_count value is none, meaning no overlapping ship points
           layout: {
-            'visibility': 'none',
+            'visibility': 'none', // When first loaded the unclustered ship icons are not visible, they only appear when the layer toggle button is clicked
             'icon-image': [
-              'match', ['get', 'navStat'], // Use the result 'navStat' property
+              'match', ['get', 'navStat'], // The result 'navStat' property values are called and used to assign the different colored ship icons
               0, 'unclustered_ship_underway_engine_icon',
               1, 'unclustered_ship_anchored_icon',
               3, 'unclustered_ship_restricted_maneuverability_icon',
               5, 'unclustered_ship_moored_icon',
-              8, 'unclustered_ship_underway_sailing_icon',
               7, 'unclustered_ship_fishing_icon',
+              8, 'unclustered_ship_underway_sailing_icon',
               15, 'unclustered_ship_undefined_icon',
 
-              'unclustered_ship_other_icon' // any other navStat values
+              'unclustered_ship_other_icon' // If a ship's 'navStat' property is none of the number above it is assigned this default colored icon (blue)
             ],
-            //'icon-image': 'unclustered_ship_icon',
             'icon-size': 0.5,
-            'icon-rotate': ['get', 'heading'],
+            'icon-rotate': ['get', 'heading'], //The direction of the ship is set by rotating based on the AIS heading - 90 deg (the starting direction of the icon)
             'icon-allow-overlap': true
           }
         });
 
-
-        // inspect a cluster on click
+        // When the clusters are clicked the map zooms in and pans so that the cluster is in the center
         map.on('click', 'clusters', function(e) {
           var features = map.queryRenderedFeatures(e.point, {
             layers: ['clusters']
@@ -417,12 +407,7 @@
           );
         });
 
-
-
-        // When a click event occurs on a feature in
-        // the unclustered-point layer, open a popup at
-        // the location of the feature, with
-        // description HTML from its properties.
+        // When the unclustered ship icons are clicked the a PopUp appears containing AIS data for that vessel
         map.on('click', 'unclustered-point_cluster_true', function(e) {
           var coordinates = e.features[0].geometry.coordinates.slice();
           var navStat = e.features[0].properties.navStat;
@@ -432,17 +417,14 @@
           var timestamp = e.features[0].properties.timestamp;
           var timestampExternal = e.features[0].properties.timestampExternal;
 
-
-          // Ensure that if the map is zoomed out such that
-          // multiple copies of the feature are visible, the
-          // popup appears over the copy being pointed to.
+          // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
-
-          new mapboxgl.Popup()
+          
+          new mapboxgl.Popup() //Create the PopUp
             .setLngLat(coordinates)
-            .setHTML(
+            .setHTML( //Set the values visible in the PopUp as HTML
               'MMSI: ' + mmsi +
               '<br> NavStat: ' + navStat +
               '<br> Position Accurate: ' + posAcc +
@@ -452,7 +434,8 @@
             )
             .addTo(map);
         });
-
+        
+        // When the unclustered ship icons are clicked the a PopUp appears containing AIS data for that vessel
         map.on('click', 'unclustered-point_cluster_false', function(e) {
           var coordinates = e.features[0].geometry.coordinates.slice();
           var navStat = e.features[0].properties.navStat;
@@ -462,17 +445,14 @@
           var timestamp = e.features[0].properties.timestamp;
           var timestampExternal = e.features[0].properties.timestampExternal;
 
-
-          // Ensure that if the map is zoomed out such that
-          // multiple copies of the feature are visible, the
-          // popup appears over the copy being pointed to.
+          // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
 
-          new mapboxgl.Popup()
+          new mapboxgl.Popup() //Create the PopUp
             .setLngLat(coordinates)
-            .setHTML(
+            .setHTML( //Set the values visible in the PopUp as HTML
               'MMSI: ' + mmsi +
               '<br> VavStat: ' + navStat +
               '<br> Position Accurate: ' + posAcc +
@@ -482,7 +462,8 @@
             )
             .addTo(map);
         });
-
+        
+        // When the MPA layer is clicked a PopUp appears containing metadata information about an individual MPA
         map.on('click', 'baltic_mpa', function(e) {
           var coordinates = e.lngLat
           var wdpa_pid = e.features[0].properties.WDPA_PID;
@@ -496,14 +477,14 @@
 
           // Ensure that if the map is zoomed out such that
           // multiple copies of the feature are visible, the
-          // popup appears over the copy being pointed to.
+          // Ensure that if the map is zoomed out such that multiple copies of the feature are visible, the popup appears over the copy being pointed to
           while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
           }
 
-          new mapboxgl.Popup()
+          new mapboxgl.Popup() //Create the PopUp
             .setLngLat(coordinates)
-            .setHTML(
+            .setHTML( //Set the values visible in the PopUp as HTML
               'WDPA PID: ' + wdpa_pid +
               '<br> Name: ' + name +
               '<br> Designation (English): ' + desig_eng +
@@ -515,51 +496,51 @@
             .addTo(map);
         });
 
-
-
-
+        //Assign behavior to the mouse such that the icon changes when hovering over ship clusters
         map.on('mouseenter', 'clusters', function() {
           map.getCanvas().style.cursor = 'pointer';
-        });
+        }); //This resets when the mouse leaves
         map.on('mouseleave', 'clusters', function() {
           map.getCanvas().style.cursor = '';
         });
-
+        
+        //Assign behavior to the mouse such that the icon changes when hovering over MPAs
         map.on('mouseenter', 'baltic_mpa', function() {
           map.getCanvas().style.cursor = 'pointer';
-        });
+        }); //This resets when the mouse leaves
         map.on('mouseleave', 'baltic_mpa', function() {
           map.getCanvas().style.cursor = '';
         });
-
+        
+        //Assign behavior to the mouse such that the icon changes when hovering over unclustered ship icons
         map.on('mouseenter', 'unclustered-point_cluster_true', function() {
           map.getCanvas().style.cursor = 'pointer';
-        });
+        }); //This resets when the mouse leaves
         map.on('mouseleave', 'unclustered-point_cluster_true', function() {
           map.getCanvas().style.cursor = '';
         });
-
+        
+        //Assign behavior to the mouse such that the icon changes when hovering over unclustered ship icons
         map.on('mouseenter', 'unclustered-point_cluster_false', function() {
           map.getCanvas().style.cursor = 'pointer';
-        });
+        }); //This resets when the mouse leaves
         map.on('mouseleave', 'unclustered-point_cluster_false', function() {
           map.getCanvas().style.cursor = '';
         });
 
-
-
+        //Assign multiple layers as a single group based on a toggle id. This allows toggling on/off multiple layers together. 
         toggleLayer(['clusters', 'clusters-count-bg', 'cluster-count', 'unclustered-point_cluster_true'], 'Clustered');
         toggleLayer(['unclustered-point_cluster_false'], 'Unclustered');
         toggleLayer(['baltic_mpa'], 'Marine Protected Areas');
 
-
-
+        //Create a toggle function that produces a toggle button with the names of each toggle layer
         function toggleLayer(ids, name) {
           var link = document.createElement('a');
           link.href = '#';
           link.className = 'active';
           link.textContent = name;
-
+           
+          //When the toggle buttons are clicked, all the layers within that toggle group have their "visibility" property switched
           link.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
