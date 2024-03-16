@@ -263,7 +263,8 @@
 
         map.addSource('ships_cluster_true', { //Add the clustered ship dataset as a source
           type: 'geojson',
-          data: 'https://meri.digitraffic.fi/api/v1/locations',
+          data: 'https://meri.digitraffic.fi/api/ais/v1/locations',
+          
           cluster: cluster_condition,
           clusterMaxZoom: 10, // Set the max zoom on whic to cluster points
           clusterRadius: 15, // Set the radius within which overlaping points are clustered
@@ -271,7 +272,7 @@
 
         map.addSource('ships_cluster_false', { //Add the unclustered ship dataset as a source
           type: 'geojson',
-          data: 'https://meri.digitraffic.fi/api/v1/locations', //Call the Fintraffic AIS data api
+          data: 'https://meri.digitraffic.fi/api/ais/v1/locations', //Call the Fintraffic AIS data api
           cluster: false,
           clusterMaxZoom: 12, // Max zoom to cluster points on
           clusterRadius: 40, // Radius of each cluster when clustering points
